@@ -12,16 +12,16 @@ LOCAL_SRC_FILES := \
 	src/crtp_profile.cpp \
 	src/ctcp_profile.cpp \
 	src/cudp_profile.cpp \
-	cuncomp_profile.cpp \
-	decomp.cpp \
-	dprofile.cpp \
-	drtp_profile.cpp \
-	dtcp_profile.cpp \
-	dudp_profile.cpp \
-	duncomp_profile.cpp \
-	lsb.cpp \
-	network.cpp \
-	rohc.cpp 
+	src/cuncomp_profile.cpp \
+	src/decomp.cpp \
+	src/dprofile.cpp \
+	src/drtp_profile.cpp \
+	src/dtcp_profile.cpp \
+	src/dudp_profile.cpp \
+	src/duncomp_profile.cpp \
+	src/lsb.cpp \
+	src/network.cpp \
+	src/rohc.cpp 
         
 include $(BUILD_STATIC_LIBRARY)
 
