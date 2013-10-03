@@ -1,0 +1,48 @@
+# --- --- ---
+#
+# File:   common/source/utility/SConscript
+# Author: Niklas Lundell
+#
+# Copyright (c) 2004 by Columbitech AB
+#
+# --- --- ---
+
+import os, sys
+Import('env')
+
+sys.path.append(env['dir_scons'])
+import objects, options_ext
+ 
+e = env.Clone()
+
+if e['compiler'] == 'gcc':
+	e.Append(CCFLAGS=' -Wno-conversion')
+
+sources = Split("""
+	compressor.cpp
+	cprofile.cpp
+	crtp_profile.cpp
+	ctcp_profile.cpp
+	cudp_profile.cpp
+	cuncomp_profile.cpp
+	decomp.cpp
+	dprofile.cpp
+	drtp_profile.cpp
+	dtcp_profile.cpp
+	dudp_profile.cpp
+	duncomp_profile.cpp
+	lsb.cpp
+	network.cpp
+	rohc.cpp
+""")
+
+	
+objs = objects.CppObjects()
+for s in sources:
+	objs.add_src(e, s)
+
+e.StaticLibrary('rohc', objs.list)
+
+#if options_ext.have_target(e, 'test'):
+#	SConscript(os.path.normpath('test/SConscript'))
+	
