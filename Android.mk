@@ -3,15 +3,15 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := rohc
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../include/
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include/
 LOCAL_C_INCLUDES := \
-	$(LOCAL_PATH)/../../include/
+	$(LOCAL_PATH)/include/
 LOCAL_SRC_FILES := \
-        compressor.cpp \
-	cprofile.cpp \
-	crtp_profile.cpp \
-	ctcp_profile.cpp \
-	cudp_profile.cpp \
+        src/compressor.cpp \
+	src/cprofile.cpp \
+	src/crtp_profile.cpp \
+	src/ctcp_profile.cpp \
+	src/cudp_profile.cpp \
 	cuncomp_profile.cpp \
 	decomp.cpp \
 	dprofile.cpp \
