@@ -124,7 +124,7 @@ namespace ROHC {
             {
                 if (contexts.size() <= maxCID) {
                     cid = static_cast<uint16_t>(contexts.size());
-                    contexts.push_back(0);
+                    contexts.push_back(static_cast<CProfile*>(0));
                 } else {
                     /**
                      * We have to remove an old profile if we get here
