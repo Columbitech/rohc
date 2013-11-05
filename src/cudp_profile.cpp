@@ -39,6 +39,12 @@ namespace ROHC
     void
     CUDPProfile::Compress(const data_t& data, data_t& output)
     {
+        const unsigned minSize = sizeof(iphdr) + sizeof(udphdr);
+        if (data.size() < minSize) {
+            error("Received UDP packet less than %u bytes", minSize);
+            return;
+        }
+
         size_t outputInSize = output.size();
         const iphdr* ip = reinterpret_cast<const iphdr*>(&data[0]);
         const udphdr* udp = reinterpret_cast<const udphdr*>(ip+1);
