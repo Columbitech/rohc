@@ -63,8 +63,6 @@ namespace ROHC
     static const uint8_t IRPacket = 0xfc;
     static const uint8_t IRv2Packet = 0xfd; // 1111 1101
     inline bool IsIR(uint8_t c) {return (c & IRPacketMask) == IRPacket;}
-	//inline bool IsIR(uint8_t c) {return c == IRv2Packet;}
-    //inline uint8_t UnmaskIR(uint8_t c) {return c & 1;}
     inline uint8_t CreateIR(unsigned int res) {return static_cast<uint8_t>(IRPacket | (res & 1));}
     
     /**
