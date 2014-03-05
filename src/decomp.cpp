@@ -22,6 +22,8 @@ namespace ROHC
     dataSizeUncompressed(0),
     dataSizeCompressed(0)
     {
+        // optimistically create the uncompressed profile for CID = 0;
+        contexts[0] = DProfile::Create(this, 0, DUncompressedProfile::ProfileID() & 0xff);
     }
     
     Decompressor::~Decompressor() {
@@ -259,15 +261,6 @@ namespace ROHC
             return;
         }
         
-#if 0
-        // FRJA, not sure why this check was here
-        if (data.end() == endOfIr) {
-            error("ParseIR failed\n");
-            SendStaticNACK(cid);
-            return;
-        }
-#endif
-        
         uint8_t readCRC = *crcPos;
         
         *crcPos = 0;
@@ -314,8 +307,7 @@ namespace ROHC
             }
         }
         
-        if (!profile)
-        {
+        if (!profile) {
             profile = DProfile::Create(this, cid, lsbProfile);
         }    
         
@@ -350,8 +342,7 @@ namespace ROHC
         }
         
         context_t::iterator i = contexts.find(cid);
-        if (contexts.end() == i)
-        {
+        if (contexts.end() == i) {
             SendStaticNACK(cid);
             return;
         }

@@ -7,12 +7,10 @@ namespace ROHC
     DUncompressedProfile::DUncompressedProfile(Decompressor* decomp, unsigned int cid)
     : DProfile(decomp, cid)
     {
-        
     }
     
     void
-    DUncompressedProfile::MergeGlobalControlAndAppendHeaders(const ROHC::global_control&, data_t&)
-    {
+    DUncompressedProfile::MergeGlobalControlAndAppendHeaders(const ROHC::global_control&, data_t&) {
         ++numberOfPacketsReceived;
         state = FULL_CONTEXT;
     }
@@ -20,10 +18,6 @@ namespace ROHC
     void
     DUncompressedProfile::ParseCO(uint8_t packetTypeIndication, data_t &data, data_iterator pos, data_t &output)
     {
-        if (FULL_CONTEXT != state)
-        {
-            return;
-        }
         // pti is first byte of IP
         output.push_back(packetTypeIndication);
         // data contains the rest
