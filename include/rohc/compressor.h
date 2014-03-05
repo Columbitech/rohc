@@ -92,6 +92,8 @@ namespace ROHC
         size_t UncompressedSize() const {return dataSizeUncompressed;}
         size_t CompressedSize() const {return dataSizeCompressed;}
     private:
+        CProfile* findProfile(unsigned profileId, const void* ip);
+
 		void HandleReceivedFeedback();
         size_t maxCID;
         

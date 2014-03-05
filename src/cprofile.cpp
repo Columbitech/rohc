@@ -41,7 +41,9 @@ namespace ROHC
     {
         //msn = 0;
         msnWindow.setP(LSBWindowPForReordering(reorder_ratio, 16));
-		memcpy(&last_ip, ip, sizeof(last_ip));
+        if (ip) {
+            memcpy(&last_ip, ip, sizeof(last_ip));
+        }
 		memset(packetCount, 0, sizeof(packetCount));
     }
     
