@@ -49,6 +49,10 @@ namespace ROHC
     
     unsigned int
     CProfile::ProfileIDForProtocol(const iphdr* ip, size_t totalSize, const std::vector<RTPDestination>& rtpDestinations) {
+        if (ROHC::HasMoreFragments(ip) || ROHC::HasFragmentOffset(ip)) {
+            return CUncompressedProfile::ProfileID();
+        }
+
         if (CUDPProfile::ProtocolID() == ip->protocol)
         {
             const udphdr* udp = reinterpret_cast<const udphdr*>(ip+1);

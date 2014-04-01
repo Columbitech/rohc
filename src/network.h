@@ -22,22 +22,31 @@ namespace ROHC {
         uint32_t daddr;
     };
     
-    inline bool HasDontFragment(const iphdr* ip)
-    {
+    inline bool HasDontFragment(const iphdr* ip) {
         // TODO: Little/big endian fix
         return (ip->frag_off & 0x0040) != 0;
     }
     
-    inline void SetDontFragment(iphdr* ip)
-    {
+    inline void SetDontFragment(iphdr* ip) {
+        // TODO: Little/big endian fix
         ip->frag_off |= 0x0040;
     }
     
-    inline void ClearDontFragment(iphdr* ip)
-    {
+    inline void ClearDontFragment(iphdr* ip) {
+        // TODO: Little/big endian fix
         ip->frag_off &= 0xffbf;
     }
-    
+
+    inline bool HasMoreFragments(iphdr const* ip) {
+        // TODO: Little/big endian fix
+        return (ip->frag_off & 0x0020) != 0;
+    }   
+
+    inline bool HasFragmentOffset(iphdr const* ip) {
+        // TODO: Little/big endian fix
+        return (ip->frag_off & 0xff1f) != 0;
+    }   
+
     struct udphdr
     {
         uint16_t source;
