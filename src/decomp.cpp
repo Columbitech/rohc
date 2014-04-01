@@ -214,6 +214,7 @@ namespace ROHC
         memset(&gc, 0, sizeof(gc));
         
         const_data_iterator endOfIr = pos;
+        bool uncompressedProfile = false;
         if (lsbProfile == (DUDPProfile::ProfileID() & 0xff))
         {
             if (packetTypeIndication != 0xfd) {
@@ -235,6 +236,7 @@ namespace ROHC
                 return;
 			}
 
+            uncompressedProfile = true;
             endOfIr = DUncompressedProfile::ParseIR(gc, data, pos);
             // endOfIr points past CRC and CRC should not be included
             // when calculating CRC for uncompressed;
@@ -322,7 +324,11 @@ namespace ROHC
         
         output.insert(output.end(), endOfIr, const_data_iterator(data.end()));
         
-        setLengthsAndIPChecksum(output.begin() + outputInitSize, output.end());
+        
+        // We may have fragments in the uncompressed profile, don't touch anything
+        if (!uncompressedProfile) {
+            setLengthsAndIPChecksum(output.begin() + outputInitSize, output.end());
+        }
     }
     
     void 

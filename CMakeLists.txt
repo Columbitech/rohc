@@ -25,3 +25,11 @@ SET(SOURCES
 file(GLOB_RECURSE INCS "*.h")
 
 add_library(rohc STATIC ${SOURCES} ${INCS})
+
+option( BUILD_TESTER "Build tester program that can load pcap files" OFF )
+
+if (BUILD_TESTER)
+    add_subdirectory(pcap_tester)
+endif()
+
+
