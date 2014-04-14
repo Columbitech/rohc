@@ -949,6 +949,8 @@ namespace ROHC
 			{
 				flags |= 0x80;
 			}
+            
+            output.push_back(flags);
 		}
 	}
 
@@ -956,7 +958,7 @@ namespace ROHC
 	CRTPProfile::create_sdvl_sn_lsb(data_t& output) const
 	{
 		unsigned int width = msnWindow.width(msn);
-
+        
 		if (width <= 7)
 		{
 			output.push_back(static_cast<uint8_t>(msn) & 0x7f);
