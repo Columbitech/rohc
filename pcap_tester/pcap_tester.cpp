@@ -3,13 +3,18 @@
 #include <rohc/decomp.h>
 #include <pcap.h>
 #include <map>
+#include <sstream>
 #include "../src/network.h"
 
+std::vector<int> RTPPorts;
 struct Host {
     Host()
     : comp(15000, ROHC::REORDERING_NONE, ROHC::IP_ID_BEHAVIOUR_RANDOM)
     , decomp(true, &comp)
     {
+        for (int port : RTPPorts) {
+            comp.addRTPDestinationPort(port);
+        }
         
     }
     
@@ -35,6 +40,15 @@ size_t ipHeaderOffset = 14;
 
 std::string currentFile;
 
+void printData(const uint8_t* b, const uint8_t* e) {
+    std::cout << std::hex;
+    for (const uint8_t* p = b; e != p; ++p) {
+        std::cout << (unsigned) *p << " ";
+    }
+    std::cout << std::dec;
+    std::cout << "\n";
+}
+
 void onPacket(u_char* user, const struct pcap_pkthdr* h, const u_char* bytes) {
     static int cnt = 0;
     
@@ -44,8 +58,8 @@ void onPacket(u_char* user, const struct pcap_pkthdr* h, const u_char* bytes) {
     }
 
     std::cout << "\n";
-    std::cout << "i = " << cnt++ << "\n";
 #endif
+    //std::cout << "i = " << cnt << "\n";
     const ROHC::iphdr* ip = reinterpret_cast<const ROHC::iphdr*>(bytes+ipHeaderOffset);
     
     Host* shost = getHost(ip->saddr);
@@ -56,6 +70,7 @@ void onPacket(u_char* user, const struct pcap_pkthdr* h, const u_char* bytes) {
     ROHC::data_t input(ipStart, ipStart + inputSize);
     ROHC::data_t compressed;
     shost->comp.compress(input, compressed);
+    //printData(compressed.data(), compressed.data() + compressed.size());
     ROHC::data_t decompressed;
     dhost->decomp.Decompress(compressed, decompressed);
 
@@ -73,17 +88,26 @@ void onPacket(u_char* user, const struct pcap_pkthdr* h, const u_char* bytes) {
             }
         }
         
-        std::cerr << "Failed: " << currentFile << "\n";
+        std::cerr << "Failed: " << cnt << " " << currentFile << "\n";
         exit(1);
     }
+    ++cnt;
     
 }
 
 int main(int argc, const char* argv[]) {
-    if (argc != 2) {
+    if (argc < 2) {
         std::cerr << "Please specify a pcap file" << std::endl;
         return 1;
     }
+    for (int i = 2; i < argc; ++i) {
+        std::stringstream ss;
+        ss << argv[i];
+        int port;
+        ss >> port;
+        RTPPorts.push_back(port);
+    }
+    
     currentFile = argv[1];
     
     //std::cout << "loading " << argv[1] << "\n";
