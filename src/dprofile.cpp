@@ -184,13 +184,8 @@ namespace ROHC
 		}
 	}
     
-    void
-    DProfile::SetReorderRatio(ROHC::Reordering_t new_rr)
-    {
-		if (new_rr != reorder_ratio)
-		{
-			reorder_ratio = new_rr;
-		}
+    void DProfile::SetReorderRatio(ROHC::Reordering_t new_rr) {
+        reorder_ratio = new_rr;
     }
     
     uint16_t

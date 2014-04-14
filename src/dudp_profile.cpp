@@ -369,7 +369,7 @@ namespace ROHC
         }
 
 		if ((flags_crc3 & 7) != control_crc3(newRR, newMsn, newBehaviour)) {
-            error("parse_co_common, checksum 3\n");
+            error("parse_co_common, checksum 3, oldMSN: %u, newMSN %u\n", msn, newMsn);
             SendNack();
             return false;
         }

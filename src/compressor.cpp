@@ -228,7 +228,7 @@ namespace ROHC {
     }
     
     void
-    Compressor::addRTPDestinationPort(/*uint32_t daddr,*/ uint16_t dport)
+    Compressor::addRTPDestinationPort(uint16_t dport)
     {
         rtpDestinations.push_back(RTPDestination(0, rohc_htons(dport)));
     }

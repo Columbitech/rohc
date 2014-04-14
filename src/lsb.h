@@ -52,6 +52,8 @@ namespace ROHC
     {
         struct LSB
         {
+            LSB() : v_ref(0), msn(0) {}
+            
             T v_ref;
             uint16_t msn;
         };
@@ -77,19 +79,16 @@ namespace ROHC
         /**
          * returns the number of bits needed to encode a value
          */
-        unsigned int width(T value) const
-        {
+        unsigned int width(T value) const {
             T v_min = std::numeric_limits<T>::max();
             T v_max = std::numeric_limits<T>::min();
             
             // No values in the window
-            if (first == next)
-            {
+            if (first == next) {
                 return maxWidth;
             }
             
-            for (size_t i = first; i != next; ++i)
-            {
+            for (size_t i = first; i != next; ++i) {
                 T vr = window[i % windowSize].v_ref;
                 
                 if (vr < v_min)
@@ -118,20 +117,15 @@ namespace ROHC
             
         }
         
-        void ackMSN(uint16_t msn)
-        {
+        void ackMSN(uint16_t msn) {
             // Don't ever empty the window
             if ((next - first) < 2) return;
             
-            while(first != next)
-            {
-                if (window[first % windowSize].msn < msn)
-                {
+            while(first != next) {
+                if (window[first % windowSize].msn < msn) {
                     ++first;
-                    
                 }
-                else
-                {
+                else {
                     break;
                 }
             }

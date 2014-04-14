@@ -85,8 +85,8 @@ namespace ROHC
         
 
 		// Ports in host byte order
-        void addRTPDestinationPort(/*uint32_t daddr,*/ uint16_t dport);
-        void removeRTPDestinationPort(/*uint32_t daddr,*/ uint16_t dport);
+        void addRTPDestinationPort(uint16_t dport);
+        void removeRTPDestinationPort(uint16_t dport);
         
         size_t NumberOfPacketsSent() const {return numberOfPacketsSent;}
         size_t UncompressedSize() const {return dataSizeUncompressed;}

@@ -13,7 +13,9 @@ namespace ROHC
     : CProfile(comp, cid, ip)
     , csrc_list(16)
 	, number_of_packets_with_new_ts_stride_to_send(0)
+    , time_stride(TIME_STRIDE_DEFAULT)
 	, timestamp_window(16, 16, 0)
+    , ts_stride(TS_STRIDE_DEFAULT)
     {
         const udphdr* udp = reinterpret_cast<const udphdr*>(ip+1);
         sport = udp->source;
@@ -21,8 +23,8 @@ namespace ROHC
         const rtphdr* rtp = reinterpret_cast<const rtphdr*>(udp+1);
         RASSERT(rtp->version == 2);
         msn = rtp->sequence_number;
-		ts_stride = TS_STRIDE_DEFAULT;
-		time_stride = TIME_STRIDE_DEFAULT;
+        last_rtp.sequence_number = 0;
+        last_rtp.timestamp = 0;
     }
     
     bool
@@ -74,12 +76,6 @@ namespace ROHC
 		if (number_of_packets_with_new_ts_stride_to_send > 0)
 		{
 			--number_of_packets_with_new_ts_stride_to_send;
-            /*
-			if (0 == number_of_packets_with_new_ts_stride_to_send)
-			{
-				timestamp_window.clear();
-			}
-             */
 		}
 
 		UpdateIpInformation(ip);
@@ -1023,8 +1019,9 @@ namespace ROHC
 	CRTPProfile::CalculateTSStride(const rtphdr* rtp) const
 	{
 		// If we are trying the same packet, return 0
-		if (rtp->sequence_number == last_rtp.sequence_number)
+		if (rtp->sequence_number == last_rtp.sequence_number) {
 			return 0;
+        }
 
 		uint16_t sn_diff = rohc_htons(rtp->sequence_number) - rohc_htons(last_rtp.sequence_number);
 		uint32_t ts_diff = rohc_htonl(rtp->timestamp) - rohc_htonl(last_rtp.timestamp);

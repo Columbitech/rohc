@@ -1,3 +1,5 @@
+#include <arpa/inet.h>
+#include <stdlib.h>
 #include <iostream>
 #include <rohc/compressor.h>
 #include <rohc/decomp.h>
@@ -12,8 +14,8 @@ struct Host {
     : comp(15000, ROHC::REORDERING_NONE, ROHC::IP_ID_BEHAVIOUR_RANDOM)
     , decomp(true, &comp)
     {
-        for (int port : RTPPorts) {
-            comp.addRTPDestinationPort(port);
+        for (std::vector<int>::const_iterator i = RTPPorts.begin(); RTPPorts.end() != i ; ++i) {
+            comp.addRTPDestinationPort(*i);
         }
         
     }
@@ -120,10 +122,11 @@ int main(int argc, const char* argv[]) {
         return 1;
     }
     
-    //int dataLink = pcap_datalink(pcap);
-    //std::cout << "data link is " << dataLink << "\n";
-    
     pcap_loop(pcap, -1, onPacket, 0);
     
     pcap_close(pcap);
+    
+    for (h_iter i = hosts.begin(); hosts.end() != i; ++i) {
+        delete i->second;
+    }
 }
