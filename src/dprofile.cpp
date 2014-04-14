@@ -148,6 +148,10 @@ namespace ROHC
             }
             else
             {
+                if (std::distance(pos, end) < 1) {
+                    error("parse_ip_id_sequential_variable not enough data");
+                    return false;
+                }
                 UpdateIPIDOffset(*pos++, 8, new_ip_id_offset);
             }
         }

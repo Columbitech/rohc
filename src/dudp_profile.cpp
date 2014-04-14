@@ -69,6 +69,11 @@ namespace ROHC
             error("parse_udp_endpoint_dynamic, failed to get MSN\n");
             return false;
         }
+        
+        if (std::distance(pos, end) < 1) {
+            error("parse_udp_endpoint_dynamic - not enough data for reorder ratio");
+            return false;
+        }
         uint8_t reserved_reorderRatio = *pos++;
         
         if(!((reserved_reorderRatio & 0xfc) == 0)) {
